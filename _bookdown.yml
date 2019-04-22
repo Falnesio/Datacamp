@@ -1,1 +1,7 @@
+repo: https://github.com/Falnesio/Datacamp
 output_dir: docs
+clean: [packages.bib]
+language:
+  label:
+    fig: "FIGURE "
+    tab: "TABLE "
