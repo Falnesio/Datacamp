@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1555942791092.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2937708415",
+    "id" : "497D5789",
+    "lastKnownWriteTime" : 1555943730,
+    "last_content_update" : 1555943730481,
+    "path" : "~/DataCamp/02-importing-data-in-r-part-1.Rmd",
+    "project_path" : "02-importing-data-in-r-part-1.Rmd",
+    "properties" : {
+        "cursorPosition" : "12,190",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

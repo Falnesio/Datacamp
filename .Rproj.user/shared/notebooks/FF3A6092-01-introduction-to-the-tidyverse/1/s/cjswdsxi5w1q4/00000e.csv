@@ -1,0 +1,3 @@
+"0","# Abaixo estamos filtrando pelo ano 2007"
+"0","gapminder %>%"
+"0","  filter(year == 2007)"

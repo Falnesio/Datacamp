@@ -1,0 +1,3 @@
+"0","# e agora por país"
+"0","gapminder %>%"
+"0","  filter(country == ""Brazil"")"

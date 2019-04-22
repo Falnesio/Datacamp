@@ -1,0 +1,13 @@
+---
+title: "DataCamp"
+author: "Falnésio Ghander Soares Borges"
+date: "April 20, 2019"
+output: bookdown::gitbook
+site: bookdown::bookdown_site
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Anotações do Fal {-}
