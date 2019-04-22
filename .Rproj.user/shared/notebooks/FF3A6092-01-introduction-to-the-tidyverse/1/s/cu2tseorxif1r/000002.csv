@@ -1,5 +1,0 @@
-"0","por_ano_continent <- gapminder %>%"
-"0","  group_by(year, continent) %>%"
-"0","  summarize(mediaLifeExp = mean(lifeExp), totalPop = sum(as.numeric(pop)))"
-"0","ggplot(por_ano_continente, aes(x = year, y = totalPop, color = continent)) +"
-"0","  geom_col()"

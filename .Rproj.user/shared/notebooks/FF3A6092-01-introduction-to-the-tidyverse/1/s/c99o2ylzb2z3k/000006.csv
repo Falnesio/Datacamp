@@ -1,2 +1,0 @@
-"0","ggplot(por_ano_continente, aes(x = mediaLifeExp)) +"
-"0","  geom_histogram(binwidth = 5)"

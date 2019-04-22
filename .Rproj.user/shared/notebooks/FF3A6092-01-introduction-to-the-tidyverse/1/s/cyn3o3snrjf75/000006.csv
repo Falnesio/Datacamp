@@ -1,3 +1,0 @@
-"0","# População será alterado para população / 1000000"
-"0","gapminder %>%"
-"0","  mutate(pop = pop / 1000000)"

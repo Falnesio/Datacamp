@@ -1,3 +1,0 @@
-"0","# podemos fazer isso para múltiplos prâmetros"
-"0","gapminder %>%"
-"0","  filter(year == 2007, country == ""Brazil"")"

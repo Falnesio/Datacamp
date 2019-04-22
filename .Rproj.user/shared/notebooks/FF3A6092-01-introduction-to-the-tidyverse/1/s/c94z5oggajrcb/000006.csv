@@ -1,5 +1,0 @@
-"0","por_continente_2007<- gapminder %>%"
-"0","  filter(year == 2007) %>%"
-"0","  group_by(continent) %>%"
-"0","  summarize(mediaLifeExp = mean(lifeExp), totalPop = sum(as.numeric(pop)))"
-"0","por_continente_2007"

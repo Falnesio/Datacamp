@@ -16,3 +16,5 @@ Nesse curso aprenderemos a trabalhar com dados de 5 tipos de dados:
  1. Bases de Dados (PostgneSQL, MySQL)
  1. Web
  1. Software de Estatística (SPSS, STATA, SAS)
+ 
+ 

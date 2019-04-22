@@ -1,3 +1,0 @@
-"0","# Abaixo criamos a variável gdp (a nova variável não pode conter espaços no nome)"
-"0","gapminder %>%"
-"0","  mutate(gdp = gdpPercap * pop)"
