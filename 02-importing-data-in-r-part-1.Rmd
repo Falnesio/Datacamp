@@ -1,4 +1,5 @@
-# Importing Data with R
+# Importing Data with R 
+## Part 1
 
 Anotações para o [curso do Datacamp](https://www.datacamp.com/courses/importing-data-in-r-part-1) ministrado pelo Filip Schouwenaars.
 
@@ -9,13 +10,94 @@ Aqui aprenderemos a importar dados no R para começar análises. Estaremos traba
 O que faremos quando precisamos transitar de Excel para R?
 Nesse curso aprenderemos a trabalhar com dados de 5 tipos de dados:
  
- 1. Flat files
-    i. "Arquivos com estrutura de campos horizontal – cada registro corresponde a uma linha de dados onde os campos estão organizados posicionalmente ou por algum tipo de separador (vírgula, espaço em branco etc)" [Fonte](http://www.pt.bwconsultant.com.br/?p=63)
-    i. `wanted_df <- read.csv("states.csv", stringsAsFactors = False)`
-    i. ![](imgs/flat-files.png)
- 1. Dados do Excel
- 1. Bases de Dados (PostgneSQL, MySQL)
- 1. Web
- 1. Software de Estatística (SPSS, STATA, SAS)
+### Flat files, arquivos achatados
+
+"Arquivos com estrutura de campos horizontal – cada registro corresponde a uma linha de dados onde os campos estão organizados posicionalmente ou por algum tipo de separador (vírgula, espaço em branco etc)" [Fonte](http://www.pt.bwconsultant.com.br/?p=63)
+
+#### read.csv - vírgulas    
+**O que fazemos quando os dados estão separados por _vírgulas_?**
+
+CSV = Valores Separados por Vírgulas
+
+```{r eval=FALSE}
+wanted_df <- read.csv("states.csv", stringsAsFactors = False)
+```
+
+![](imgs/flat-files.png)
+
+Se o arquivo não estiver no diretório de trabalho, terá que escrever o seu `PATH`(caminho). Por exemplo, se estiver na pasta denominada dados no seu diretório de trabalho, escrevá `"dados/state.csv"`.
+
+Poderá alternativamente usar 
+```{r eval=FALSE} 
+caminho <- file.path("-", "datasets", "states.csv")
+``` 
+para encontrar a path que utilizará e guardar numa variável como caminho.
+
+`stringsAsFactors` é `FALSE`, pois o default é `TRUE`, porém não queremos puxar os dados no formato de caracteres como categorias.
+
+#### read.delim - indentação
+**O que fazemos quando os dados estão separados por indentações?**
+```{r eval=FALSE}
+read.delim("states.txt", # path do arquivo
+           colClasses = c("character", # OPCIONAL: colocar as  classes das colunas 
+                          "character", #muito bom se quiser especificar apenas
+                          "numeric",   #algumas colunas com caracteres como
+                          "numeric"),  #categoria. "NULL" elimina a coluna.
+           stringsAsFactors = FALSE)
+```
+![](imgs/flat-files_read.delim.png)
+
+#### read.table - qualquer formato
+**O que faremos quando os dados estão malucos?**
+
+A quantidade de argumentos são absurdos, devido a amplitude dos casos específicos possíveis. Vamos olhar o caso específico do arquivo `states2.txt`.
+
+![](imgs/flat-files_states2.png)
+
+```{r eval=FALSE}
+read.table("states2.txt",  # o path do arquivo
+           header = TRUE,  # se a primeira linha são os nomes das variáveis
+           sep = "/",      # o qu separa os dados
+           stringsAsFactors = FALSE) # se as variáveis guardando caracteres são categorias.
+```
+
+![](imgs/flat-file_states2_output.png)
+
+Aprendizado aleatório:
+max(), mostra o maior valor de um vetor
+which.max(), mostra o local do maior valor
+
+#### Conclusão - Wrappers
+```{r eval=FALSE}
+read.table() # é a forma genérica de
+read.csv() # o wrapper para CSV e
+read.delim() # o wrapper para arquivos .txt com indentação
+```
+Os últimos utilizam o primeiro com diferentes argumentos preformatados.
+
+```{r eval=FALSE}
+# São identicos
+read.table("states.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+read.csv("states.csv", stringsAsFactors = FALSE) 
+# e
+read.table("states.csv", header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+read.delim("states.csv", stringsAsFactors = FALSE) 
+```
+```{r eval=FALSE}
+read.csv2() # e
+read.delim2() # são configurações para diferenças regionais, lidando com 
+              # separadores para decimais, etc.
+```
+
+
+### Dados do Excel
+
+### Bases de Dados (PostgneSQL, MySQL)
+
+### Web
+
+### Software de Estatística (SPSS, STATA, SAS)
+
+
  
  
