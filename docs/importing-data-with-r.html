@@ -226,9 +226,108 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">read.delim2</span>() <span class="co"># são configurações para diferenças regionais, lidando com </span>
               <span class="co"># separadores para decimais, etc.</span></code></pre></div>
 </div>
+<div id="tidyverse" class="section level4">
+<h4><span class="header-section-number">2.2.1.5</span> Tidyverse</h4>
+<div id="readr---csv-em-geral" class="section level5">
+<h5><span class="header-section-number">2.2.1.5.1</span> readr - csv em geral</h5>
+<p>Ambos abaixo puxam da mesma forma, porém a do Hadley automatiza algumas coisas como a questão das categorias. Porém a saída do read_csv é um tibble e não uma tabela.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+<span class="kw">read_csv</span>(<span class="st">&quot;states.csv&quot;</span>)
+<span class="kw">read.csv</span>(<span class="st">&quot;states.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) </code></pre></div>
+<p><img src="imgs/flat-file_readr_csv.png" /> A função abaixo puxa arquivos texto separados por indentação.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+<span class="kw">read_tsv</span>(<span class="st">&quot;states.txt&quot;</span>)
+<span class="kw">read.csv</span>(<span class="st">&quot;states.txt&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) </code></pre></div>
+<p><img src="imgs/flat-file_readr_tsv.png" /> A função principal é a read_delim() <img src="imgs/flat-files_readr_read_delim.png" /> Ambos abaixo puxam os mesmos dados.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+<span class="kw">read_delim</span>(<span class="st">&quot;states.txt&quot;</span>)
+<span class="kw">read.table</span>(<span class="st">&quot;states.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;/&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) </code></pre></div>
+<div class="figure">
+<img src="imgs/flat-files_readr_read_delim_2.png" />
+
+</div>
+<p>O argumento <code>col_names</code> pode ser usado para atribuir nomes de colunas, se for <code>FALSE</code> serão atribuídos nomes como X1, X2 e X3. <code>col_types</code> especificam os tipos das colunas. Tem como simplificar esse input: <code>&quot;cidl_&quot; == c(&quot;character&quot;, &quot;double&quot;, &quot;integer&quot;, &quot;logical&quot;, &quot;skip&quot;&quot;)</code></p>
+<p>Outra forma de associar colunas a determinadas estruturas e tipos seria usando <code>collectors</code> ou coletores. Abaio temos os coletores as variáveis <code>fac</code> e <code>int</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fac &lt;-<span class="st"> </span><span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Beef&quot;</span>, <span class="st">&quot;Meat&quot;</span>, <span class="st">&quot;Poultry&quot;</span>))
+int &lt;-<span class="st"> </span><span class="kw">col_integer</span>()
+hotdogs_factor &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;hotdogs.txt&quot;</span>,
+                           <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;type&quot;</span>, <span class="st">&quot;calories&quot;</span>, <span class="st">&quot;sodium&quot;</span>),
+                           <span class="dt">col_types =</span> <span class="kw">list</span>(fac, int, int))</code></pre></div>
+<p>Temos também o argumento <code>skip</code> que pula linhas, considerando a linha de nomes (portanto tendo que ser renomeadas), e <code>n_max</code> que limita a quantidade de linhas que serião puxadas.</p>
+</div>
+<div id="package-pacote-data.tablefread" class="section level5">
+<h5><span class="header-section-number">2.2.1.5.2</span> package (pacote) data.table:fread</h5>
+<p>Criados por Matt Dowle e Arn Srinivasan, esse pacote é muit rápido. Foi feito para manipulação de dados e tem uma função para importar dados <code>fread()</code>. É parecido com <code>read.csv()</code>. Todavia fread organiza os dados automaticamente, adicionando nomes quando não existem e aceitando os nomes quando existem, por exemplo. Ele faz as mesma coisas para separadores e os tipos das colunas.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(data.table)</code></pre></div>
+<p>Os argumentos <code>drop</code> e <code>select</code> funcionam para escolher quais colunas manter ao puxar uma série de dados. Servem tanto para especificar colunas por nome quanto por número.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fread</span>(<span class="st">&quot;path/to/file.txt&quot;</span>, <span class="dt">drop =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>)
+<span class="kw">fread</span>(<span class="st">&quot;path/to/file.txt&quot;</span>, <span class="dt">select =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>))
+<span class="kw">fread</span>(<span class="st">&quot;path/to/file.txt&quot;</span>, <span class="dt">drop =</span> <span class="kw">c</span>(<span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>))
+<span class="kw">fread</span>(<span class="st">&quot;path/to/file.txt&quot;</span>, <span class="dt">select =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;e&quot;</span>))</code></pre></div>
+</div>
+</div>
 </div>
 <div id="dados-do-excel" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Dados do Excel</h3>
+<div id="readxl" class="section level4">
+<h4><span class="header-section-number">2.2.2.1</span> readxl</h4>
+<p>Estaremos utilizando o <code>readxl</code> do Hadley Wickham, da tidyverse.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)</code></pre></div>
+<p>Arquivos Excel são dados no formato tabular agrupados por sheets. <img src="imgs/excel-sheets.png" /></p>
+<p>Existem duas funções <code>excel_sheets()</code> e <code>read_excel</code>. O primeiro lista os sheets diferentes do arquivo excel, enquanto o segundo importa tal sheet como um tibble.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">dir</span>()
+[<span class="dv">1</span>] <span class="st">&quot;cities.xlsx&quot;</span>
+
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">excel_sheets</span>(<span class="st">&quot;cities.xlsx&quot;</span>)
+[<span class="dv">1</span>] <span class="st">&quot;year_1990&quot;</span> <span class="st">&quot;year_2000&quot;</span>
+
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;cities.xlsx&quot;</span>, <span class="dt">sheet =</span> número/nome do sheet)
+<span class="co"># exemplos idênticos</span>
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;cities.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">1</span>)
+<span class="op">&gt;</span><span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;cities.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="st">&quot;year_1990&quot;</span>)
+
+<span class="co"># uma forma mais rápida para puxar tudo seri por um lapply</span>
+<span class="op">&gt;</span><span class="st"> </span>dados &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">excel_sheets</span>(<span class="st">&quot;cities.xlsx&quot;</span>), read_excel, <span class="dt">path =</span> <span class="st">&quot;cities.xlsx&quot;</span>)</code></pre></div>
+<div id="argumentos-de-read_excel" class="section level5">
+<h5><span class="header-section-number">2.2.2.1.1</span> Argumentos de read_excel</h5>
+<p>Existe o argumento <code>col_names</code> que leva TRUE, FALSE, ou c(nomes). <code>col_types</code> leva tipos de colunas: text (texto), numeric (número), date (data) e blank (evitar a coluna). <code>skip</code> pula linhas. <code>n_max</code> é o máximo número de linhas a ler.</p>
+</div>
+</div>
+<div id="gdata" class="section level4">
+<h4><span class="header-section-number">2.2.2.2</span> gdata</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gdata)</code></pre></div>
+<p>Existem alternativas ao pacote anterior, vamos olhar esse do Gregory Warnes. É uma série de ferramentas para manipulação de dados em inúmeras áreas.</p>
+<p>Iremos utilizar o <code>read.xls()</code>. Não existe função para ler sheets separados. Usa a linguagem de programação Perl para funcionar. Ela converte os dados xls em csv, que depois é lido usando <code>read.csv</code>. Isso é bom pra quem conhece os argumentos de <code>read.table</code>, mas é muito ineficiente.</p>
+<p>Está sendo comentado aqui, pois no momento da gravação da aula, read_excel ainda estava sob forte modificação por ser novo e gdata já era mais estável.</p>
+<div id="argumentos-de-read.xls" class="section level5">
+<h5><span class="header-section-number">2.2.2.2.1</span> Argumentos de read.xls</h5>
+<p>Todos os argumentos de <code>read.csv</code> podem ser utilizados.</p>
+</div>
+</div>
+<div id="xlconnect" class="section level4">
+<h4><span class="header-section-number">2.2.2.3</span> XLConnect</h4>
+<p>Criado por Martin Studer, é a forma mais completa de trabalhar com arquivos de excel no R. Qualquer ação que você faria no Excel, consegue fazer dentro do R por meio da linguegem de programação Java.</p>
+<p>Editar sheets de excel, formatar dados…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(XLConnectJars)
+<span class="kw">library</span>(XLConnect)</code></pre></div>
+<pre><code>## XLConnect 0.2-15 by Mirai Solutions GmbH [aut],
+##   Martin Studer [cre],
+##   The Apache Software Foundation [ctb, cph] (Apache POI),
+##   Graph Builder [ctb, cph] (Curvesapi Java library)</code></pre>
+<pre><code>## http://www.mirai-solutions.com
+## https://github.com/miraisolutions/xlconnect</code></pre>
+<p>É importante instalar “Oracle’s Java Development Kit” (JDK) anteriormente: rJava.</p>
+<p>O primeiro passo depois de carregar a biblioteca, é colocar o workbook numa variável.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book &lt;-<span class="st"> </span><span class="kw">loadWorkbook</span>(<span class="st">&quot;cities.xlsx&quot;</span>)</code></pre></div>
+<p>Verificará olhando a estrutura que o objeto book é um workbook, que funciona como uma ponte entre R e Excel.</p>
+<p>Para obter os nomes dos sheets podemos utilizar <code>getSheets(nome do arquivo)</code>.</p>
+<p>Para ler os dados do sheet usamos <code>readWorksheet()</code>. Podemos usar o argumento <code>sheet</code> para especificar qual sheet queremos. Tem mais, podemos usar <code>startRow</code>, <code>endRow</code>, <code>startCol</code> e <code>endCol</code> para especificar exatamente qual quadrado de dados queremos.</p>
+<p>Para fazer uma análise geral do arquivo como um todo, pode-se fazer o seguinte:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_book &lt;-<span class="st"> </span><span class="kw">loadWorkbook</span>(<span class="st">&quot;urbanpop.xlsx&quot;</span>)
+sheets &lt;-<span class="st"> </span><span class="kw">getSheets</span>(my_book)
+all &lt;-<span class="st"> </span><span class="kw">lapply</span>(sheets, readWorksheet, <span class="dt">object =</span> my_book)
+<span class="kw">str</span>(all)</code></pre></div>
+</div>
 </div>
 <div id="bases-de-dados-postgnesql-mysql" class="section level3">
 <h3><span class="header-section-number">2.2.3</span> Bases de Dados (PostgneSQL, MySQL)</h3>
